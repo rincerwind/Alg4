@@ -23,9 +23,11 @@ public class Main {
 		String searchStr;
 		
 		byte[] sWordBytes;
-		byte[] fileContents;
+		byte[] file1Contents;
+		byte[] file2Contents;
 		
-		FileInput f;
+		FileInput f1;
+		FileInput f2;
 		Scanner standardInput = new Scanner(System.in);
 		
 		do {   
@@ -50,10 +52,10 @@ public class Main {
 						searchStr = standardInput.nextLine();
 						sWordBytes = searchStr.getBytes();
 						
-						f = new FileInput(fileName1);
-						fileContents = f.readFile();
+						f1 = new FileInput(fileName1);
+						file1Contents = f1.readFile();
 						
-						t = new SuffixTree(fileContents);
+						t = new SuffixTree(file1Contents);
 						a = new SuffixTreeAppl(t);
 						Task1Info t1Result = a.searchSuffixTree(sWordBytes);
 						
@@ -81,10 +83,10 @@ public class Main {
 						searchStr = standardInput.nextLine();
 						sWordBytes = searchStr.getBytes();
 						
-						f = new FileInput(fileName1);
-						fileContents = f.readFile();
+						f1 = new FileInput(fileName1);
+						file1Contents = f1.readFile();
 						
-						t = new SuffixTree(fileContents);
+						t = new SuffixTree(file1Contents);
 						a = new SuffixTreeAppl(t);
 						Task2Info t2Result = a.allOccurrences(sWordBytes);
 						LinkedList<Integer> l = t2Result.getPositions();
@@ -112,10 +114,10 @@ public class Main {
 						System.out.print("Enter the name of the text file: ");
 						fileName1 = standardInput.nextLine();
 						
-						f = new FileInput(fileName1);
-						fileContents = f.readFile();
+						f1 = new FileInput(fileName1);
+						file1Contents = f1.readFile();
 						
-						t = new SuffixTree(fileContents);
+						t = new SuffixTree(file1Contents);
 						a = new SuffixTreeAppl(t);
 						Task3Info t3Result = a.traverseForLrs();
 						byte[] text = t.getString();
@@ -135,7 +137,22 @@ public class Main {
 							System.out.println( fileName1 );
 						}
 						break;
-					case 4: System.out.println("You entered '4'"); break;
+					case 4:
+						System.out.print("Enter the name of the first text file: ");
+						fileName1 = standardInput.nextLine();
+						
+						System.out.print("Enter the name of the second text file: ");
+						fileName2 = standardInput.nextLine();
+						
+						f1 = new FileInput(fileName1);
+						file1Contents = f1.readFile();
+						f2 = new FileInput(fileName2);
+						file2Contents = f2.readFile();
+						
+						t = new SuffixTree(file1Contents, file2Contents);
+						a = new SuffixTreeAppl(t);
+						
+						break;
 					/* replace the above four lines with code to display relevant
 					 * output for each task    
 	                 *

@@ -163,7 +163,7 @@ public class SuffixTreeAppl {
 			if( sibling != null )
 				q.add(sibling);
 		}
-		return t3Info; // replace with your code!
+		return t3Info;
 	}
 
 	/**
@@ -180,8 +180,33 @@ public class SuffixTreeAppl {
 	 * 
 	 * @return a Task4Info object
 	 */
+	// To Do!
 	public Task4Info traverseForLcs (int s1Length) {
+		Task4Info t4Info = new Task4Info();
+		Queue<SuffixTreeNode> q = new LinkedList<SuffixTreeNode>();
+		SuffixTreeNode current, child, sibling;
 		
-		return null; // replace with your code!
+		q.add( t.getRoot() );
+		
+		while( !q.isEmpty() ){
+			current = q.poll();
+			child = current.getChild();
+			sibling = current.getSibling();
+			
+			if( child == null ){
+				int prefix_len = current.getLeftLabel() - current.getSuffix();
+				if( sibling != null && prefix_len > t4Info.getLen() ){
+					t4Info.setLen( prefix_len );
+					t4Info.setPos1( current.getSuffix() );
+					t4Info.setPos2( sibling.getSuffix() );
+				}
+			}
+			else
+				q.add(child);
+			
+			if( sibling != null )
+				q.add(sibling);
+		}
+		return t4Info;
 	}
 }
