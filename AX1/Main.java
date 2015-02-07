@@ -25,6 +25,7 @@ public class Main {
 		byte[] sWordBytes;
 		byte[] file1Contents;
 		byte[] file2Contents;
+		byte[] text;
 		
 		FileInput f1;
 		FileInput f2;
@@ -120,7 +121,7 @@ public class Main {
 						t = new SuffixTree(file1Contents);
 						a = new SuffixTreeAppl(t);
 						Task3Info t3Result = a.traverseForLrs();
-						byte[] text = t.getString();
+						text = t.getString();
 						
 						if( t3Result.getLen() < 1 )
 							System.out.printf("No LRS was found in %s\n", fileName1);
@@ -151,6 +152,19 @@ public class Main {
 						
 						t = new SuffixTree(file1Contents, file2Contents);
 						a = new SuffixTreeAppl(t);
+						Task4Info t4Result = a.traverseForLcs(file1Contents.length);
+						text = t.getString();
+						
+						if( t4Result.getLen() < 1 )
+							System.out.printf("No LCS of %s and %s\n", fileName1, fileName2);
+						else{
+							System.out.printf("An LCS of %s and %s is \"", fileName1, fileName2);
+							printByteArray(text, t4Result.getPos1(), t4Result.getLen());
+							System.out.println("\"");
+							System.out.printf("Its length is %d\n", t4Result.getLen());
+							System.out.printf("Starting position in %s is %d\n", fileName1, t4Result.getPos1());
+							System.out.printf("Starting position in %s is %d\n", fileName2, t4Result.getPos2());
+						}
 						
 						break;
 					/* replace the above four lines with code to display relevant

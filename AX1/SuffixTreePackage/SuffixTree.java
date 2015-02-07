@@ -62,26 +62,76 @@ public class SuffixTree {
 		System.arraycopy(sInput2, 0, s, sInput1.length + 1, sInput2.length);
 		s[stringLen + 1] = (byte) '$';   // append termination character to original string
 		
+		buildGeneralisedTree( sInput1.length, sInput2.length );
+		calcDecendantSuffix( root, sInput1.length );
+	}
+	
+	private void calcDecendantSuffix( SuffixTreeNode current, int len1 ){
+		SuffixTreeNode child = current.getChild();
+		SuffixTreeNode curr_child;
+		int suffix = current.getSuffix();
+		
+		if( child == null ){
+			if( suffix >= 1 && suffix <= len1 ){
+				current.setLeafNodeString1(true);
+				current.setLeafNodeNumString1(current.getSuffix());
+				//System.out.println("1 leaf");
+			}
+			
+			else if( suffix >= len1 + 2 && suffix <= stringLen + 1 ){
+				current.setLeafNodeString2(true);
+				current.setLeafNodeNumString2(current.getSuffix());
+				//System.out.println("2 leaf");
+			}
+			
+			return;
+		}
+		
+		curr_child = child;
+		while( curr_child != null ){
+			calcDecendantSuffix( curr_child, len1 );
+			
+			if( !current.getLeafNodeString1() && curr_child.getLeafNodeString1() ){
+				current.setLeafNodeString1( true );
+				current.setLeafNodeNumString1( curr_child.getLeafNodeNumString1() );
+				//System.out.println("1 branch");
+			}
+			
+			if( !current.getLeafNodeString2() && curr_child.getLeafNodeString2() ){
+				current.setLeafNodeString2( true );
+				current.setLeafNodeNumString2( curr_child.getLeafNodeNumString2() );
+				//System.out.println("2 branch");
+			}
+			
+			curr_child = curr_child.getSibling();
+		}
+	}
+	
+	/**
+	 * Builds the generalised suffix tree.
+	 */
+	private void buildGeneralisedTree(int len1, int len2){
 		try {		
-			for (int i=0; i<= stringLen; i++) {
+			for (int i=0; i<= stringLen + 1; i++) {
 				// for large files, the following line may be useful for
 				// indicating the progress of the suffix tree construction
 				if (i % 10000==0) System.out.println(i);
 
 				// raise an exception if the text file contained a '$' or '#'
-				if ( (s[i] == (byte) '#' && i != sInput1.length)
-						|| (s[i] == (byte) '$' && i < stringLen)  )
+				if ( (s[i] == (byte) '#' && i != len1)
+						|| (s[i] == (byte) '$' && i < stringLen + 1)  )
 					throw new Exception();
 				else
 					insert(i);  // insert suffix number i of z into tree
 			}
 		} 
 		catch (Exception e) {
-			System.out.println("Text file contains a $ character!");
+			System.out.println("Text file contains a $(or #) character!");
 			System.exit(-1);
 		}
 	}
-
+	
+	
 	/**
 	 * Builds the suffix tree.
 	 */

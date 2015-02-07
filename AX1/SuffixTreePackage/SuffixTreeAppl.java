@@ -180,33 +180,34 @@ public class SuffixTreeAppl {
 	 * 
 	 * @return a Task4Info object
 	 */
-	// To Do!
 	public Task4Info traverseForLcs (int s1Length) {
-		Task4Info t4Info = new Task4Info();
-		Queue<SuffixTreeNode> q = new LinkedList<SuffixTreeNode>();
-		SuffixTreeNode current, child, sibling;
+		Task4Info t4Result = new Task4Info();
 		
-		q.add( t.getRoot() );
+		getLcs( t4Result, t.getRoot(), null, s1Length );
+		return t4Result;
+	}// end of traverseForLcs
+	
+	private void getLcs( Task4Info t4Result, SuffixTreeNode current, 
+			SuffixTreeNode prev,  int s1Length){
 		
-		while( !q.isEmpty() ){
-			current = q.poll();
-			child = current.getChild();
-			sibling = current.getSibling();
-			
-			if( child == null ){
-				int prefix_len = current.getLeftLabel() - current.getSuffix();
-				if( sibling != null && prefix_len > t4Info.getLen() ){
-					t4Info.setLen( prefix_len );
-					t4Info.setPos1( current.getSuffix() );
-					t4Info.setPos2( sibling.getSuffix() );
-				}
+		SuffixTreeNode child = current.getChild();
+		SuffixTreeNode curr_child;
+		
+		if( child == null && prev.getLeafNodeString1() && prev.getLeafNodeString2() ){
+			int prefix_len = current.getLeftLabel() - current.getSuffix();
+			if( prefix_len > t4Result.getLen() ){
+				t4Result.setLen( prefix_len );
+				t4Result.setPos1( prev.getLeafNodeNumString1() );
+				t4Result.setPos2( prev.getLeafNodeNumString2() - (s1Length + 1) );
 			}
-			else
-				q.add(child);
 			
-			if( sibling != null )
-				q.add(sibling);
+			return;
 		}
-		return t4Info;
-	}
+		
+		curr_child = child;
+		while( curr_child != null ){
+			getLcs( t4Result, curr_child, current, s1Length );
+			curr_child = curr_child.getSibling();
+		}
+	}// end of getLcs
 }
