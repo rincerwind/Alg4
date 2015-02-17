@@ -115,7 +115,7 @@ public class SuffixTree {
 			for (int i=0; i<= stringLen + 1; i++) {
 				// for large files, the following line may be useful for
 				// indicating the progress of the suffix tree construction
-				if (i % 10000==0) System.out.println(i);
+				//if (i % 10000==0) System.out.println(i);
 
 				// raise an exception if the text file contained a '$' or '#'
 				if ( (s[i] == (byte) '#' && i != len1)
@@ -140,7 +140,7 @@ public class SuffixTree {
 			for (int i=0; i<= stringLen; i++) {
 				// for large files, the following line may be useful for
 				// indicating the progress of the suffix tree construction
-				if (i % 10000==0) System.out.println(i);
+				//if (i % 10000==0) System.out.println(i);
 
 				// raise an exception if the text file contained a '$'
 				if (s[i] == (byte) '$' && i < stringLen)
