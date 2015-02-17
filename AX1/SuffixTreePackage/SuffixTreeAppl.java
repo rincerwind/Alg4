@@ -183,19 +183,18 @@ public class SuffixTreeAppl {
 	public Task4Info traverseForLcs (int s1Length) {
 		Task4Info t4Result = new Task4Info();
 		
-		getLcs( t4Result, t.getRoot(), null, s1Length, 0 );
+		getLcs( t4Result, t.getRoot(), s1Length, 0 );
 		return t4Result;
 	}// end of traverseForLcs
 	
-	private void getLcs( Task4Info t4Result, SuffixTreeNode current, 
-			SuffixTreeNode prev,  int s1Length, int currLen){
+	private void getLcs( Task4Info t4Result, SuffixTreeNode current,  
+			int s1Length, int currLen){
 		
 		SuffixTreeNode child = current.getChild();
 		SuffixTreeNode curr_child;
 		
 		if( current.getLeafNodeString1() && current.getLeafNodeString2() ){
 			System.out.println(currLen);
-		//if( child == null && prev.getLeafNodeString1() && prev.getLeafNodeString2() ){
 			int prefix_len = current.getLeftLabel() - current.getLeafNodeNumString1() + 1;
 			if( currLen > t4Result.getLen() ){
 				t4Result.setLen( currLen );
@@ -206,7 +205,7 @@ public class SuffixTreeAppl {
 		
 		while( child != null ){
 			currLen += child.getRightLabel() - child.getLeftLabel() + 1;
-			getLcs( t4Result, child, current, s1Length, currLen );
+			getLcs( t4Result, child, s1Length, currLen );
 			currLen -= child.getRightLabel() - child.getLeftLabel() + 1;
 			
 			child = child.getSibling();
