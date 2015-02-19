@@ -66,6 +66,7 @@ public class SuffixTree {
 		calcDecendantSuffix( root, sInput1.length );
 	}
 	
+	// For each node, finds the string to which it belongs (or both strings)
 	private void calcDecendantSuffix( SuffixTreeNode current, int len1 ){
 		SuffixTreeNode child = current.getChild();
 		SuffixTreeNode curr_child;
@@ -87,6 +88,8 @@ public class SuffixTree {
 			return;
 		}
 		
+		// Check all children of the current node in order to determine the type of the
+		// current node
 		curr_child = child;
 		while( curr_child != null ){
 			calcDecendantSuffix( curr_child, len1 );

@@ -62,6 +62,7 @@ public class SuffixTreeAppl {
 			j = next.getLeftLabel() + 1;
 			i = pos + 1;
 
+			// try to match as many characters of the node and the search string
 			while ( i < x.length && j <= next.getRightLabel() ){
 				if( x[i] != text[j] )
 					break;
@@ -80,7 +81,7 @@ public class SuffixTreeAppl {
 				break;
 			}
 			if (j > next.getRightLabel()) {
-				// succeeded in matching whole segment, so go further down tree
+				// succeeded in matching a whole segment, so go further down the tree
 				pos = i;
 				current = next;
 			}
@@ -104,18 +105,26 @@ public class SuffixTreeAppl {
 	 * @return a Task2Info object
 	 */
 	public Task2Info allOccurrences(byte[] x) {
+		
+		// Try to find the search string and return the last matched node
 		Task1Info t1Info = searchSuffixTree(x);
 		Task2Info t2Info = new Task2Info();
 		Queue<SuffixTreeNode> q = new LinkedList<SuffixTreeNode>();
 		SuffixTreeNode current, child, sibling;
 		
+		// If nothing was found, end the search
+		if( t1Info.getPos() < 0 )
+			return t2Info;
+		
 		q.add( t1Info.getMatchNode().getChild() );
 		
+		// Traverse the sub-tree of the last matched node
 		while( !q.isEmpty() ){
 			current = q.poll();
 			child = current.getChild();
 			sibling = current.getSibling();
 			
+			// If it is a leaf, add its suffix to the list
 			if( child == null )
 				t2Info.addEntry( current.getSuffix() );
 			else
@@ -144,12 +153,16 @@ public class SuffixTreeAppl {
 		
 		q.add( t.getRoot() );
 		
+		// Traverse the whole tree
 		while( !q.isEmpty() ){
 			current = q.poll();
 			child = current.getChild();
 			sibling = current.getSibling();
 			
+			// Check if it is a leaf-node
 			if( child == null ){
+				
+				// Check if the new length is better than the max length
 				int prefix_len = current.getLeftLabel() - current.getSuffix();
 				if( sibling != null && prefix_len > t3Info.getLen() ){
 					t3Info.setLen( prefix_len );
@@ -191,11 +204,11 @@ public class SuffixTreeAppl {
 			int s1Length, int currLen){
 		
 		SuffixTreeNode child = current.getChild();
-		SuffixTreeNode curr_child;
 		
+		// We found a node that is present in both strings
 		if( current.getLeafNodeString1() && current.getLeafNodeString2() ){
-			System.out.println(currLen);
-			int prefix_len = current.getLeftLabel() - current.getLeafNodeNumString1() + 1;
+			
+			// Check if the new length is better than the current maximum length
 			if( currLen > t4Result.getLen() ){
 				t4Result.setLen( currLen );
 				t4Result.setPos1( current.getLeafNodeNumString1() );
@@ -203,6 +216,8 @@ public class SuffixTreeAppl {
 			}
 		}
 		
+		// Traverse all children of the current child and modify the current length
+		// of the path respectively
 		while( child != null ){
 			currLen += child.getRightLabel() - child.getLeftLabel() + 1;
 			getLcs( t4Result, child, s1Length, currLen );
